@@ -39,8 +39,8 @@ public class AccountRepositoryTest {
         assertThat(accountRepository.findAll().size()).isEqualTo(1);
         assertThat(updatedAccount.getToken()).isEqualTo("geon");
 
-        // delete
-//        accountRepository.delete(savedAccount);
-//        assertThat(accountRepository.findAll().size()).isEqualTo(0);
+         //delete
+        accountRepository.delete(savedAccount);
+        assertThat(accountRepository.findAll().size()).isEqualTo(0);
     }
 }

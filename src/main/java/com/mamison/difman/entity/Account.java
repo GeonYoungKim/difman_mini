@@ -35,4 +35,14 @@ public class Account implements Serializable {
         this.token = token;
         this.useful = useful;
     }
+
+    public void addReport(Report report) {
+        this.getReports().add(report);
+        report.setAccount(this);
+    }
+
+    public void deleteReport(Report deleteReport) {
+        this.getReports().remove(deleteReport);
+        deleteReport.setAccount(null);
+    }
 }
