@@ -45,21 +45,22 @@ public class ReportRepositoryTest {
                 .build();
         account.addReport(report);
         account.addReport(report2);
-        Account savedAccount = accountRepository.saveAndFlush(account);
 
-        assertThat(savedAccount.getReports().size()).isEqualTo(2);
+        reportRepository.saveAndFlush(report);
+        reportRepository.saveAndFlush(report2);
+
+        assertThat(reportRepository.findAll().size()).isEqualTo(2);
 
         //update
-        savedAccount.getReports().forEach(report1 -> report1.setTitle("geonyeong"));
-        Account updatedAccount = accountRepository.saveAndFlush(savedAccount);
-
-        updatedAccount.getReports().forEach(report1 -> assertThat(report1.getTitle()).isEqualTo("geonyeong"));
+        reportRepository.findAll().forEach(report1 -> report1.setTitle("geonyeong"));
+        reportRepository.flush();
+        reportRepository.findAll().forEach(report1 -> assertThat(report1.getTitle()).isEqualTo("geonyeong"));
 
         //delete
-        Report deleteReport = updatedAccount.getReports().get(0);
-        updatedAccount.deleteReport(deleteReport);
-
+        Report deleteReport = reportRepository.findAll().get(0);
+        account.deleteReport(deleteReport);
         reportRepository.delete(deleteReport);
         reportRepository.flush();
+        assertThat(reportRepository.findAll().size()).isEqualTo(1);
     }
 }
