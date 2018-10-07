@@ -5,6 +5,8 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,6 +26,9 @@ public class Report implements Serializable {
     @NotNull
     @ManyToOne(cascade = CascadeType.ALL)
     private Account account;
+
+    @OneToMany(mappedBy = "report", cascade = CascadeType.ALL)
+    private List<Daily> dailies = new ArrayList<Daily>();
 
     @Builder
     public Report(@NotNull String title, @NotNull String period, @NotNull Account account) {

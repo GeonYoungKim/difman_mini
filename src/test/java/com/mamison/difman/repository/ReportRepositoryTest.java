@@ -2,6 +2,7 @@ package com.mamison.difman.repository;
 
 import com.google.gson.Gson;
 import com.mamison.difman.entity.Account;
+import com.mamison.difman.entity.Daily;
 import com.mamison.difman.entity.Report;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +14,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestComponent;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import static java.lang.Math.toIntExact;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
@@ -20,14 +26,18 @@ import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTest
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = NONE)
 public class ReportRepositoryTest {
+    private final String dateFormat = "yyyy-MM-dd";
     @Autowired
     private AccountRepository accountRepository;
 
     @Autowired
     private ReportRepository reportRepository;
 
+    @Autowired
+    private Dailyrepository dailyrepository;
+
     @Test
-    public void crud(){
+    public void crud() {
         // create
         Account account = Account.builder()
                 .email("c2619zz@naver.com")
@@ -35,7 +45,7 @@ public class ReportRepositoryTest {
                 .build();
         Report report = Report.builder()
                 .account(account)
-                .period("2018-09-10~2018-10-01")
+                .period("2018-09-10~2018-10-12")
                 .title("중간고사")
                 .build();
         Report report2 = Report.builder()
@@ -43,13 +53,14 @@ public class ReportRepositoryTest {
                 .period("2018-09-10~2018-10-02")
                 .title("기말고사")
                 .build();
+
         account.addReport(report);
         account.addReport(report2);
 
         reportRepository.saveAndFlush(report);
         reportRepository.saveAndFlush(report2);
 
-        assertThat(reportRepository.findAll().size()).isEqualTo(2);
+        assertThat(reportRepository.findAll().size()).isEqualTo(1);
 
         //update
         reportRepository.findAll().forEach(report1 -> report1.setTitle("geonyeong"));
