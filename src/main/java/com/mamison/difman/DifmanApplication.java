@@ -7,9 +7,11 @@ import org.springframework.batch.core.configuration.annotation.EnableBatchProces
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableBatchProcessing
 @SpringBootApplication
+@EnableScheduling
 public class DifmanApplication {
 
 	public static void main(String[] args) {

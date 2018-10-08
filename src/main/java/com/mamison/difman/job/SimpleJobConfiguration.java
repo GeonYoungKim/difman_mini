@@ -27,19 +27,24 @@ public class SimpleJobConfiguration {
     private final StepBuilderFactory stepBuilderFactory;
 
     private static final int chunkSize = 100;
+
     @Bean
-    public Job simpleJob() {
-        return jobBuilderFactory.get("JpaItemWriterJob")
+    public Job mamisonjob() {
+        return jobBuilderFactory.get("mamisonjob")
                 .start(jpaItemWriterStep())
                 .build();
     }
     @Bean
     public Step jpaItemWriterStep() {
         return stepBuilderFactory.get("jpaItemWriterStep")
-                .<Map, Map>chunk(chunkSize)
-                .reader(jpaItemWriterReader())
-                .processor(jpaItemProcessor())
-                .writer(jpaItemWriter())
+//                .<Map, Map>chunk(chunkSize)
+//                .reader(jpaItemWriterReader())
+//                .processor(jpaItemProcessor())
+//                .writer(jpaItemWriter())
+                .tasklet((contribution, chunkContext) -> {
+                    System.out.println("********************************************************batch scheduleed!!!!!!!!1********************************");
+                    return RepeatStatus.FINISHED;
+                })
                 .build();
     }
 
