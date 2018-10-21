@@ -25,7 +25,7 @@ public class UserController {
     @GetMapping("/{userName}")
     public User getUser(@PathVariable("userName") final String userName){
         return new User(userName,1000L);
-    }   
+    }
 
     @Getter
     @Setter
