@@ -41,10 +41,10 @@ public class DailyRepositoryTest {
 //            startDate = new Date(startDate.getTime() + (1000 * 60 * 60 * 24));
 //        }
 
-        Daily daily = Daily.builder()
-                .score(0)
-                .build();
-
-        dailyrepository.saveAndFlush(daily);
+//        Daily daily = Daily.builder()
+//                .score(0)
+//                .build();
+//
+//        dailyrepository.saveAndFlush(daily);
     }
 }

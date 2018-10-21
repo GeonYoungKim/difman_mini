@@ -20,6 +20,8 @@ import java.util.List;
 public class Account implements Serializable {
 
     @Id
+    private String id;
+
     private String email;
 
     private String token;
@@ -30,7 +32,8 @@ public class Account implements Serializable {
     private List<Report> reports = new ArrayList<>();
 
     @Builder
-    public Account(String email, String token, boolean useful) {
+    public Account(String id,String email, String token, boolean useful) {
+        this.id= id;
         this.email = email;
         this.token = token;
         this.useful = useful;
