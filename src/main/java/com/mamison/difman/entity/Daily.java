@@ -21,20 +21,26 @@ public class Daily {
     private Long id;
 
     @Temporal(TemporalType.DATE)
-    private Date date = new Date();
+    private Date dailyDate = new Date();
 
     private int score;
+
+    private int toDo;
+
+    private String evaluate;
 
     @ManyToOne
     private Report report;
 
     @OneToMany(mappedBy = "daily")
-    private List<DailyTime> dailyTimes = new ArrayList<DailyTime>();
+    private List<TimeLine> timeLines = new ArrayList<TimeLine>();
 
     @Builder
-    public Daily(Date date, int score, Report report) {
-        this.date = date;
+    public Daily(Date dailyDate, int score, int toDo, String evaluate, Report report) {
+        this.dailyDate = dailyDate;
         this.score = score;
+        this.toDo = toDo;
+        this.evaluate = evaluate;
         this.report = report;
     }
 }

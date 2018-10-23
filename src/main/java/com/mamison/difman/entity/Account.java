@@ -20,23 +20,17 @@ import java.util.List;
 public class Account implements Serializable {
 
     @Id
-    private String id;
-
     private String email;
 
-    private String token;
-
-    private boolean useful;
+    private String name;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
     private List<Report> reports = new ArrayList<>();
 
     @Builder
-    public Account(String id,String email, String token, boolean useful) {
-        this.id= id;
+    public Account(String email, String name) {
         this.email = email;
-        this.token = token;
-        this.useful = useful;
+        this.name = name;
     }
 
     public void addReport(Report report) {

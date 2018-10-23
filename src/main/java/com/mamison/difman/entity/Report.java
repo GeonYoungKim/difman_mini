@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -18,12 +19,14 @@ public class Report implements Serializable {
     @GeneratedValue
     private Long id;
 
-    @NotNull
-    private String title;
-    @NotNull
-    private String period;
+    @Temporal(TemporalType.DATE)
+    private Date startDate = new Date();
 
-    @NotNull
+    @Temporal(TemporalType.DATE)
+    private Date endDate = new Date();
+
+    private String title;
+
     @ManyToOne(cascade = CascadeType.ALL)
     private Account account;
 
@@ -31,9 +34,10 @@ public class Report implements Serializable {
     private List<Daily> dailies = new ArrayList<Daily>();
 
     @Builder
-    public Report(@NotNull String title, @NotNull String period, @NotNull Account account) {
-        this.title = title;
-        this.period = period;
+    public Report(Account account,Date startDate, Date endDate, String title) {
         this.account = account;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.title = title;
     }
 }
