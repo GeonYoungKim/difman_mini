@@ -1,5 +1,7 @@
 package org.depromeet.fill_day.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -19,9 +21,11 @@ public class Timeline {
     private UUID uid;
 
     @Temporal(TemporalType.TIME)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private Date start;
 
     @Temporal(TemporalType.TIME)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private Date end;
 
     @Column(columnDefinition = "TEXT")
@@ -35,13 +39,23 @@ public class Timeline {
     private EvaluationScore score;
 
     public enum EvaluationScore {
-        BEST,
-        SOSO,
-        BAD
+        BEST(3),
+        SOSO(2),
+        BAD(1);
+
+        private final int value;
+        private EvaluationScore(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
     }
 
     @ManyToOne
     @JoinColumn
+    @JsonIgnoreProperties("timelines")
     private Day day;
 
 }

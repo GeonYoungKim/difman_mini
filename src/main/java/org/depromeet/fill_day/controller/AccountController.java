@@ -9,16 +9,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/auth")
-public class AuthenticationController {
+@RequestMapping("/v1/accounts")
+public class AccountController {
 
     private final AuthenticationService authenticationService;
 
-    public AuthenticationController(AuthenticationService authenticationService) {
+    public AccountController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
 
-    @PostMapping(value="/signup")
+    @PostMapping
     public ResponseEntity<AccountDTO> join(@RequestBody AccountDTO accountDTO) {
         return ResponseEntity.ok(authenticationService.join(accountDTO));
     }

@@ -7,6 +7,8 @@ import org.depromeet.fill_day.domain.entity.Timeline;
 @Data
 public class TimelineDTO {
 
+    private String uid;
+
     private String start;
 
     private String end;

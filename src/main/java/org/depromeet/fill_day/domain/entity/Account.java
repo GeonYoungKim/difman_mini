@@ -33,7 +33,7 @@ public class Account implements Serializable {
     @Enumerated(EnumType.ORDINAL)
     private Provider provider;
 
-    @OneToMany(mappedBy="account", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy="account", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Day> days;
 
     public enum Provider {

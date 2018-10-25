@@ -1,5 +1,6 @@
 package org.depromeet.fill_day.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -29,6 +30,7 @@ public class Todo implements Serializable {
 
     @ManyToOne
     @JoinColumn
+    @JsonIgnoreProperties("todoList")
     private Day day;
 
 }

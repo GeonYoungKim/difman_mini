@@ -39,6 +39,8 @@ public class AuthenticationService {
 
     public AccountDTO join(AccountDTO newAccountDTO) {
         Account newAccount = objectMapper.convertValue(newAccountDTO, Account.class);
+        newAccount.setAccessToken(String.format("{noop}%s", newAccount.getAccessToken()));
+
         Account createdAccount = accountRepository.save(newAccount);
 
         return objectMapper.convertValue(createdAccount, AccountDTO.class);
@@ -46,23 +48,23 @@ public class AuthenticationService {
 
     public UsernamePasswordAuthenticationToken signIn(String token) throws NoAccountFoundException,
             AuthenticationFailureException {
-        String uid = null;
+        String email = null;
 
         try {
             final JWTVerifier jwtVerifier = JWT.require(AUTH_TOKEN_ENCODE_TYPE)
                     .build();
             DecodedJWT jwt = jwtVerifier.verify(token);
-            uid = jwt.getSubject();
+            email = jwt.getSubject();
         } catch (JWTVerificationException exception){
             exception.printStackTrace();
             throw new AuthenticationFailureException();
         }
 
-        if (uid == null) {
+        if (email == null) {
             throw new AuthenticationFailureException();
         }
 
-        final Optional<Account> foundAccount = accountRepository.findById(uid);
+        final Optional<Account> foundAccount = accountRepository.findByEmail(email);
         return foundAccount
                 .map(account -> {
                     AccountDTO dto = objectMapper.convertValue(account, AccountDTO.class);
@@ -78,9 +80,17 @@ public class AuthenticationService {
     public String generateToken(AccountDTO accountDTO) {
         String token = null;
 
+        final Optional<Account> foundAccount = accountRepository.findByEmail(accountDTO.getEmail());
+        foundAccount
+                .map(account -> {
+                    account.setAccessToken(accountDTO.getAccessToken());
+                    return account;
+                })
+                .orElseThrow(NoAccountFoundException::new);
+
         try {
             token = JWT.create()
-                    .withSubject(accountDTO.getUid())
+                    .withSubject(accountDTO.getEmail())
                     .sign(AUTH_TOKEN_ENCODE_TYPE);
         } catch (JWTCreationException exception){
             exception.printStackTrace();

@@ -1,9 +1,12 @@
 package org.depromeet.fill_day.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.depromeet.fill_day.domain.AccountDetailsImpl;
 import org.depromeet.fill_day.domain.dto.AccountDTO;
+import org.depromeet.fill_day.exception.NoAccountFoundException;
 import org.depromeet.fill_day.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,8 +18,6 @@ import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -59,12 +60,15 @@ public class TokenAuthenticationFilter extends UsernamePasswordAuthenticationFil
                                             Authentication auth) throws IOException, ServletException {
 
         AccountDTO accountDTO = AccountDTO.builder()
-                .email(((User) auth.getPrincipal()).getUsername())
-                .accessToken(((User) auth.getPrincipal()).getPassword())
+                .email(((AccountDetailsImpl) auth.getPrincipal()).getUsername())
+                .accessToken(((AccountDetailsImpl) auth.getPrincipal()).getPassword())
                 .build();
 
-        String token = authenticationService.generateToken(accountDTO);
-
-        res.addHeader("Authorization", String.format("Bearer %s", token));
+        try {
+            String token = authenticationService.generateToken(accountDTO);
+            res.addHeader("Authorization", String.format("Bearer %s", token));
+        } catch(NoAccountFoundException e) {
+            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        }
     }
 }

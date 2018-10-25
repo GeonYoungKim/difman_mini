@@ -3,6 +3,7 @@ package org.depromeet.fill_day.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.depromeet.fill_day.domain.dto.TimelineDTO;
 import org.depromeet.fill_day.domain.entity.Timeline;
+import org.depromeet.fill_day.exception.NotFoundException;
 import org.depromeet.fill_day.repository.DayRepository;
 import org.depromeet.fill_day.repository.TimelineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class TimelineService {
     }
 
     public Optional<TimelineDTO> findByUID(String uid) {
-        Optional<Timeline> foundTimeline = timelineRepository.findById(uid);
+        Optional<Timeline> foundTimeline = timelineRepository.findById(UUID.fromString(uid));
 
         if (foundTimeline.isPresent()) {
             TimelineDTO foundDTO = objectMapper.convertValue(foundTimeline.get(), TimelineDTO.class);
@@ -43,6 +44,7 @@ public class TimelineService {
 
     public TimelineDTO update(String uid, TimelineDTO updatedTimelineDTO) {
         Optional<TimelineDTO> foundTimeline = findByUID(uid);
+        foundTimeline.orElseThrow(NotFoundException::new);
 
         Timeline updatedTimeline = objectMapper.convertValue(updatedTimelineDTO, Timeline.class);
         updatedTimeline.setUid(UUID.fromString(uid));
@@ -52,6 +54,9 @@ public class TimelineService {
     }
 
     public void delete(String uid) {
-        timelineRepository.deleteById(uid);
+        Optional<TimelineDTO> foundTimeline = findByUID(uid);
+        foundTimeline.orElseThrow(NotFoundException::new);
+
+        timelineRepository.deleteById(UUID.fromString(uid));
     }
 }
