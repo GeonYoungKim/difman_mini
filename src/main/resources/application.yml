@@ -7,7 +7,7 @@ spring:
     url: jdbc:mysql://difmanmini.c0jozjhm0fyf.ap-northeast-2.rds.amazonaws.com:3306/c2619zz?useSSL=false&autoReconnect=true&useUnicode=true&characterEncoding=utf-8
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:

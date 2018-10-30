@@ -1,8 +1,8 @@
 package org.depromeet.fill_day.config;
 
+import lombok.RequiredArgsConstructor;
 import org.depromeet.fill_day.service.AuthenticationService;
 import org.depromeet.fill_day.service.UserDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,17 +18,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
+@RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationService authenticationService;
-
-    @Autowired
-    public SecurityConfiguration(UserDetailsServiceImpl userDetailsService,
-                                 AuthenticationService authenticationService) {
-        this.userDetailsService = userDetailsService;
-        this.authenticationService = authenticationService;
-    }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
